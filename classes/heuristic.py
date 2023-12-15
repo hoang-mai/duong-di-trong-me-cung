@@ -2,7 +2,7 @@ class Heuristic:
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        self.cells_record = [[None for y in range(rows)] for x in range(cols)]
+        self.cells_record = [[0 for y in range(rows)] for x in range(cols)]
 
     def SetRecord(self, cell, distance):
         self.cells_record[cell.x][cell.y] = distance
@@ -20,14 +20,10 @@ class Heuristic:
 
         return farthest, max_distance
 
-    def Merge(self, other):
+    def Merge(self, shortest_path):
         new_distances = Heuristic(self.rows, self.cols)
-        for x in range(self.cols):
-            for y in range(self.rows):
-                if other.cells_record[x][y] != None:
-                    new_distances.cells_record[x][y] = other.cells_record[x][y]
-                else:
-                    new_distances.cells_record[x][y] = self.cells_record[x][y]
+        for i  in range(len(shortest_path)):
+            new_distances.cells_record[shortest_path[i].x][shortest_path[i].y] = shortest_path[i].g
 
         return new_distances
 

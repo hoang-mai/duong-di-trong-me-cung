@@ -2,10 +2,15 @@ import pygame
 from ui.colors import *
 from classes.heuristic import Heuristic
 from constants import *
-
+import heapq
 pygame.font.init()
 text_font = pygame.font.SysFont("Arial", cell_size//3)
 offset = 0
+
+
+def heuristic(a, b):
+    return abs(a.x - b.x) + abs(a.y - b.y)
+
 
 class Cell:
     def __init__(self, x, y, size=40):
@@ -19,6 +24,11 @@ class Cell:
         self.isPath = False
         self.show_path = False
         self.highlight = white
+
+        self.g = 0  # Chi phí từ điểm xuất phát đến nút hiện tại
+        self.h = 0  # Chi phí ước lượng từ nút hiện tại đến điểm đích
+        self.f = 0  # Tổng chi phí (f = g + h)
+        self.parent=None
 
         self.show_highlight = False
         self.size = size
@@ -38,22 +48,45 @@ class Cell:
         self.textColor = (0, 0, 0)
         self.show_text = True
 
-    def CalculateHeuristic(self, rows, cols):
-        h_distances = Heuristic(rows, cols)
-        frontier = [self]
-        while len(frontier) > 0:
-            new_frontier = []
-            for c in frontier:
-                for cell in c.connections:
-                    if h_distances.GetRecord(cell):
-                        continue
-                    val = 0 if h_distances.GetRecord(c) == None else h_distances.GetRecord(c)
-                    h_distances.SetRecord(cell, val+1)
-                    new_frontier.append(cell)
+    def __lt__(self, other):
+        # Cài đặt so sánh dựa trên giá trị f
+        return self.f < other.f
+    def astar(self,screen, end_node):
 
-            frontier = new_frontier
-        h_distances.SetRecord(self, 0)
-        return h_distances
+        open_set = []
+        closed_set = set()
+        heapq.heappush(open_set, (self.f, self))
+
+        while open_set:
+            current_node = heapq.heappop(open_set)[1]
+            if current_node == end_node:
+                path = []
+                while current_node:
+                    path.append(current_node)
+                    current_node = current_node.parent
+                return path[::-1]
+
+            closed_set.add(current_node)
+
+            for neighbor in current_node.connections:
+                if neighbor in closed_set:
+                    continue
+                neighbor.parent = current_node
+                neighbor.g = current_node.g + 1
+                neighbor.h = heuristic(neighbor,end_node)
+                neighbor.f = neighbor.g + neighbor.h
+                start_pos = ((current_node.x+0.5)*self.size, (current_node.y+0.5)*self.size)
+                end_pos = ((neighbor.x+0.5)*self.size, (neighbor.y+0.5)*self.size)
+
+                pygame.draw.line(screen, orange, start_pos,end_pos, 2)
+                pygame.draw.circle(screen, orange, start_pos, self.size// 6)
+                pygame.display.flip()
+                clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
+
+                drawing_speed = 10  # Số frames mỗi giây bạn muốn vẽ
+                clock.tick(drawing_speed)
+                if (neighbor.f, neighbor) not in open_set:
+                    heapq.heappush(open_set, (neighbor.f, neighbor))
 
     def IsConneted(self, cell):
         if cell != None:

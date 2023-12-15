@@ -61,5 +61,5 @@ while run:
 
     pygame.display.flip()
 
-pygame.image.save(screen, "C:/Users/Laptop/PycharmProjects/pythonProject/images/path.png")
+pygame.image.save(screen, "C:/Users/Laptop/PycharmProjects/duong-di-trong-me-cung/images/path.png")
 pygame.quit()
