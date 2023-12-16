@@ -83,7 +83,7 @@ class Cell:
                 pygame.display.flip()
                 clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
 
-                drawing_speed = 10  # Số frames mỗi giây bạn muốn vẽ
+                drawing_speed = 30  # Số frames mỗi giây bạn muốn vẽ
                 clock.tick(drawing_speed)
                 if (neighbor.f, neighbor) not in open_set:
                     heapq.heappush(open_set, (neighbor.f, neighbor))

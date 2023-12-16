@@ -164,10 +164,18 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
       #          if shortest_path.GetRecord(self.grid.cells[x][y]):
       #              self.grid.cells[x][y].isPath = True
     for i in range(len(shortest_path)):
-         shortest_path[i].isPath=True
+        shortest_path[i].isPath=True
     colorGridShortestPath = GridColor(self.path_color)
     temp_path=Heuristic(self.rows, self.cols)
     temp_path = temp_path.Merge(shortest_path)
+
+    self.grid.heuristics = temp_path
+    for x in range(len(self.grid.cells)):
+        for y in range(len(self.grid.cells[x])):
+            if self.grid.cells[x][y]:
+                self.grid.cells[x][y].cost = 0 if self.grid.heuristics.cells_record[x][y] == None else self.grid.cells[x][y].g
+
+
     colorGridShortestPath.distances(temp_path, self.end_node, self.starting_node, self.grid)
 
 
