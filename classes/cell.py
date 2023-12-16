@@ -83,7 +83,7 @@ class Cell:
                 pygame.display.flip()
                 clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
 
-                drawing_speed = 30  # Số frames mỗi giây bạn muốn vẽ
+                drawing_speed = 100  # Số frames mỗi giây bạn muốn vẽ
                 clock.tick(drawing_speed)
                 if (neighbor.f, neighbor) not in open_set:
                     heapq.heappush(open_set, (neighbor.f, neighbor))
@@ -106,7 +106,7 @@ class Cell:
             if self.isStartingNode:
                 color = yellow
             if self.isCurrent:
-                color = navy_blue
+                color = white
             elif self.isgoalNode:
                 color = blue
             pygame.draw.rect(screen, color, [x, y, self.size-offset, self.size-offset])

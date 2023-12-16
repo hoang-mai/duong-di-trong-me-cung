@@ -15,7 +15,7 @@ growingTree = classes.GrowingTree(classes.Grid(rows, cols, cell_size), "GREEN")
 
 show_text = False
 color_mode = False
-show_path = False
+show_path = True
 start = False
 run = True
 while run:
@@ -48,7 +48,6 @@ while run:
         growingTree.Generate(screen, show_text, color_mode, show_path)
     else:
         PressEnter.Render(screen)
-
     pygame.display.flip()
 
 pygame.image.save(screen, "C:\\Users\\Administrator\\Desktop\\HUST\\AI\\duong-di-trong-me-cung\\images\\path.png")

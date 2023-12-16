@@ -93,41 +93,12 @@ class Grid:
                 elif A.NorthWest == B:
                     A.NorthWest, B.SouthEast = None, None
 
-    def Deadends(self):
-        deadends_set = []
-        for x in range(len(self.cells)):
-            for y in range(len(self.cells[x])):
-                if len(self.cells[x][y].connections) == 1:
-                    deadends_set.append(self.cells[x][y])
-        return deadends_set
-
-    def Braid(self, p=1):
-        deadends = self.Deadends()
-        random.shuffle(deadends)
-
-        for cell in deadends:
-            if len(cell.connections) != 1 or random.uniform(0, 1) > p:
-                continue
-            neighbours = [c for c in cell.neighbours if c not in cell.connections]
-            best = []
-            for c in neighbours:
-                if len(c.connections ) == 1:
-                    best.append(c)
-            if len(best) == 0:
-                best = neighbours
-
-            neighbour = random.choice(best)
-            Grid.JoinAndDestroyWalls(cell, neighbour)
-
-
     def Show(self, screen, show_heuristic, show_color_map, shortest_path = None):
         if not self.isSorted and shortest_path:
-            for x in range(self.cols):
-                for y in range(self.rows):
-                    if shortest_path.cells_record[x][y]:
-                        val = shortest_path.cells_record[x][y]
+            for i in range(len(shortest_path)):
+                        val = shortest_path[i].g
                         self.path_values.append(val)
-                        self.path[str(val)] = ((x+0.5)*self.cell_size, (y+0.5)*self.cell_size)
+                        self.path[str(val)] = ((shortest_path[i].x+0.5)*self.cell_size, (shortest_path[i].y+0.5)*self.cell_size)
             self.path_values = sorted(self.path_values)
             self.isSorted = True
 
@@ -165,30 +136,31 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
       #              self.grid.cells[x][y].isPath = True
     for i in range(len(shortest_path)):
         shortest_path[i].isPath=True
-    colorGridShortestPath = GridColor(self.path_color)
-    temp_path=Heuristic(self.rows, self.cols)
-    temp_path = temp_path.Merge(shortest_path)
+    #colorGridShortestPath = GridColor(self.path_color)
+    #temp_path=Heuristic(self.rows, self.cols)
+    #temp_path = temp_path.Merge(shortest_path)
 
-    self.grid.heuristics = temp_path
+    self.grid.heuristics = Heuristic(self.rows, self.cols)
     for x in range(len(self.grid.cells)):
         for y in range(len(self.grid.cells[x])):
             if self.grid.cells[x][y]:
                 self.grid.cells[x][y].cost = 0 if self.grid.heuristics.cells_record[x][y] == None else self.grid.cells[x][y].g
 
 
-    colorGridShortestPath.distances(temp_path, self.end_node, self.starting_node, self.grid)
-
+    #colorGridShortestPath.distances(temp_path, self.end_node, self.starting_node, self.grid)
+    for i in range(len(shortest_path)):
+        shortest_path[i].highlight = green
 
 
     #colorGridMap = GridColor(self.path_color)
     #colorGridMap.distances(temp_path, self.end_node, self.starting_node, self.grid)
 
-    for x in range(self.grid.cols):
-        for y in range(self.grid.rows):
-            if self.grid.cells[x][y]:
-                self.grid.cells[x][y].highlight = colorGridShortestPath.UpdateColor(self.grid.cells[x][y])
+    #for x in range(self.grid.cols):
+        #for y in range(self.grid.rows):
+            #if self.grid.cells[x][y]:
+                #self.grid.cells[x][y].highlight = colorGridShortestPath.UpdateColor(self.grid.cells[x][y])
                 #self.grid.cells[x][y].color = colorGridMap.UpdateColor(self.grid.cells[x][y])
 
-                self.grid.Show(screen, show_heuristic, show_color_map)
-                pygame.display.flip()
-    self.shortest_path = temp_path
+                #self.grid.Show(screen, show_heuristic, show_color_map)
+                #pygame.display.flip()
+    self.shortest_path = shortest_path

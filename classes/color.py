@@ -19,9 +19,9 @@ class GridColor:
 
     def UpdateColor(self, cell):
         if  self.color != "HSV":
-            val = self.heuristics.GetRecord(cell)
+            val = cell.g
             distance = 0 if val == None else val
-            intensity = (self.max_distance - distance)/self.max_distance
+            intensity = (1000 - distance)/1000
             dark = min(int(255 * intensity), 255)
             bright = min( int(128 + (127 * intensity)),255)
 
