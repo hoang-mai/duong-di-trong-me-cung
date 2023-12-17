@@ -5,18 +5,20 @@ import classes
 from ui.setup import *
 
 def get_user_input(screen):
-    input_box_width = pygame.Rect(300, 200, 140, 32)
-    input_box_height = pygame.Rect(300, 250, 140, 32)
+    input_box_width = pygame.Rect(screen.get_width() // 2 - 70, screen.get_height() // 2 - 16, 140, 32)
+    input_box_height = pygame.Rect(screen.get_width() // 2 - 70, screen.get_height() // 2 + 50, 140, 32)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
     active_box = None
     text_width = ''
     text_height = ''
-    instruction_text = "May` nhap. ho. bo. may` cai'"
-
-    # Tạo font cho văn bản
-    font = pygame.font.Font(None, 32)
+    instruction_text = "May` nhap chieu dai voi chieu rong vao day"
+    instruction_width = "Chieu dai nay"
+    instruction_height = "Chieu rong nay"
+    warning_message = ''
+    font_size = 20
+    font = pygame.font.Font(None, font_size)
 
     while True:
         for event in pygame.event.get():
@@ -39,9 +41,12 @@ def get_user_input(screen):
                         try:
                             width = int(text_width)
                             height = int(text_height)
-                            return width, height
+                            if width <= 0 or height <= 0:
+                                warning_message = "Sai roi nhe"
+                            else:
+                                return width, height
                         except ValueError:
-                            print("Vui lòng nhập số nguyên hợp lệ.")
+                            warning_message = "Sai roi nhe"
                             text_width = ''
                             text_height = ''
                     elif event.key == pygame.K_BACKSPACE:
@@ -49,6 +54,15 @@ def get_user_input(screen):
                             text_width = text_width[:-1]
                         elif active_box == input_box_height:
                             text_height = text_height[:-1]
+                        warning_message = ''
+                    elif event.key == pygame.K_TAB:
+                        if active_box == input_box_width:
+                            active_box = input_box_height
+                            color = color_inactive
+                        elif active_box == input_box_height:
+                            active_box = input_box_width
+                            color = color_inactive
+                        warning_message = ''
                     else:
                         char = event.unicode
                         if char.isdigit():
@@ -56,12 +70,23 @@ def get_user_input(screen):
                                 text_width += char
                             elif active_box == input_box_height:
                                 text_height += char
+                        warning_message = ''
 
         screen.fill(white)
 
         # Hiển thị hướng dẫn
         instruction_surface = font.render(instruction_text, True, (0, 0, 0))
-        screen.blit(instruction_surface, (input_box_width.x, input_box_width.y - 30))
+        screen.blit(instruction_surface, (screen.get_width() // 2 - instruction_surface.get_width() // 2, screen.get_height() // 2 - 60))
+
+        instruction_surface_width = font.render(instruction_width, True, (0, 0, 0))
+        screen.blit(instruction_surface_width, (screen.get_width() // 2 - 160, screen.get_height() // 2 - 30))
+
+        instruction_surface_height = font.render(instruction_height, True, (0, 0, 0))
+        screen.blit(instruction_surface_height, (screen.get_width() // 2 - 160, screen.get_height() // 2 + 26))
+
+        # Hiển thị cảnh báo
+        warning_surface = font.render(warning_message, True, (255, 0, 0))
+        screen.blit(warning_surface, (screen.get_width() // 2 - warning_surface.get_width() // 2, screen.get_height() // 2 + 100))
 
         # Vẽ ô text box cho chiều rộng
         txt_surface_width = font.render(text_width, True, color)
@@ -86,25 +111,22 @@ if __name__ == "__main__":
     # Initialize pygame screen
     screen = pygame.display.set_mode(size)
 
-    # Nhận thông tin từ người dùng
+    # lay dai ,rong
     width, height = get_user_input(screen)
 
-    # Tính toán kích thước của từng ô trong mê cung
+    # resize cai me cung
     cell_size = min(screen.get_width() // width, screen.get_height() // height)
-
-    # Tính toán lại kích thước mê cung
     maze_width = width * cell_size
     maze_height = height * cell_size
 
-    # Điều chỉnh kích thước màn hình hiển thị mê cung
+    # resize man hinh
     screen = pygame.display.set_mode((maze_width, maze_height))
 
-    # Khởi tạo mê cung với chiều dài và chiều rộng từ người dùng
+    # ve me cung
     growingTree = classes.GrowingTree(classes.Grid(height, width, cell_size), "GREEN")
 
     margin = 5  # Số lượng pixel khoảng trắng giữa các ô
 
-    # Các biến khác giữ nguyên
     show_text = False
     color_mode = False
     show_path = True
@@ -114,6 +136,10 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     fps = 60
 
+
+    def update_press_enter():
+        current_width, current_height = pygame.display.get_surface().get_size()
+        PressEnter.position = (current_width // 2, current_height // 2)
     while run:
         clock.tick(fps)
         frame_rate = int(clock.get_fps())
@@ -137,13 +163,10 @@ if __name__ == "__main__":
                 if event.button == 1:
                     rightMouseClicked = True
 
-        screen.fill(black)
-
         if start:
             growingTree.Generate(screen, show_text, color_mode, show_path)
         else:
             PressEnter.Render(screen)
-
         pygame.display.flip()
 
     pygame.image.save(screen, "./images/path.png")
