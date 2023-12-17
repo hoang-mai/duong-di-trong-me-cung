@@ -119,26 +119,9 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     # it's gonna initialize a grid that store the cost of each cell
     # from the starting node
     shortest_path = self.starting_node.astar(screen,self.end_node)
-    #self.grid.heuristics = h_distances
-    #for x in range(len(self.grid.cells)):
-    #    for y in range(len(self.grid.cells[x])):
-    #        if self.grid.cells[x][y]:
-    #            self.grid.cells[x][y].cost = 0 if self.grid.heuristics.cells_record[x][y] == None else self.grid.heuristics.cells_record[x][y]
-
-    # get the path from the goad node to the starting node
-    #shortest_path = h_distances.BacktrackPath(self.end_node, self.starting_node)
-    #for x in range(self.grid.cols):
-     #   for y in range(self.grid.rows):
-     #       if self.grid.cells[x][y]:
-                # check if the cell is in the path grid
-                # If it is then set it as path
-      #          if shortest_path.GetRecord(self.grid.cells[x][y]):
-      #              self.grid.cells[x][y].isPath = True
+  
     for i in range(len(shortest_path)):
         shortest_path[i].isPath=True
-    #colorGridShortestPath = GridColor(self.path_color)
-    #temp_path=Heuristic(self.rows, self.cols)
-    #temp_path = temp_path.Merge(shortest_path)
 
     self.grid.heuristics = Heuristic(self.rows, self.cols)
     for x in range(len(self.grid.cells)):
@@ -147,20 +130,6 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
                 self.grid.cells[x][y].cost = 0 if self.grid.heuristics.cells_record[x][y] == None else self.grid.cells[x][y].g
 
 
-    #colorGridShortestPath.distances(temp_path, self.end_node, self.starting_node, self.grid)
     for i in range(len(shortest_path)):
         shortest_path[i].highlight = green
-
-
-    #colorGridMap = GridColor(self.path_color)
-    #colorGridMap.distances(temp_path, self.end_node, self.starting_node, self.grid)
-
-    #for x in range(self.grid.cols):
-        #for y in range(self.grid.rows):
-            #if self.grid.cells[x][y]:
-                #self.grid.cells[x][y].highlight = colorGridShortestPath.UpdateColor(self.grid.cells[x][y])
-                #self.grid.cells[x][y].color = colorGridMap.UpdateColor(self.grid.cells[x][y])
-
-                #self.grid.Show(screen, show_heuristic, show_color_map)
-                #pygame.display.flip()
     self.shortest_path = shortest_path

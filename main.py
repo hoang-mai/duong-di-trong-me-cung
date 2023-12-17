@@ -13,11 +13,11 @@ def get_user_input(screen):
     active_box = None
     text_width = ''
     text_height = ''
-    instruction_text = "May` nhap chieu dai voi chieu rong vao day"
-    instruction_width = "Chieu dai nay"
-    instruction_height = "Chieu rong nay"
+    instruction_text = "Enter the number of cells of 1 edge"
+    instruction_width = "Width"
+    instruction_height = "Height"
     warning_message = ''
-    font_size = 20
+    font_size = 30
     font = pygame.font.Font(None, font_size)
 
     while True:
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     run = True
 
     clock = pygame.time.Clock()
-    fps = 60
+    fps = 120
 
 
     def update_press_enter():

@@ -7,7 +7,5 @@ class Heuristic:
     def SetRecord(self, cell, distance):
         self.cells_record[cell.x][cell.y] = distance
 
-
-
     def GetRecord(self, cell):
         return self.cells_record[cell.x][cell.y]
