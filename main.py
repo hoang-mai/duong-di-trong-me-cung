@@ -3,7 +3,16 @@ import sys
 from constants import *
 import classes
 from ui.setup import *
+def reset_maze():
+    # Khai báo biến toàn cục để có thể thay đổi giá trị từ hàm
+    global growingTree, start, show_path
 
+    # Tạo một đối tượng lưới mới
+    growingTree = classes.GrowingTree(classes.Grid(height, width, cell_size), "GREEN")
+
+    # Đặt lại trạng thái bắt đầu và hiển thị đường
+    start = False
+    show_path = True
 def get_user_input(screen):
     input_box_width = pygame.Rect(screen.get_width() // 2 - 70, screen.get_height() // 2 - 16, 140, 32)
     input_box_height = pygame.Rect(screen.get_width() // 2 - 70, screen.get_height() // 2 + 50, 140, 32)
@@ -149,6 +158,8 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:  # Ví dụ: Sử dụng phím 'r' để reset mê cung
+                    reset_maze()
                 if event.key == pygame.K_ESCAPE:
                     run = False
                 if event.key == pygame.K_RETURN:
