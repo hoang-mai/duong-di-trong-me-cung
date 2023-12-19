@@ -158,7 +158,7 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:  # Ví dụ: Sử dụng phím 'r' để reset mê cung
+                if event.key == pygame.K_r:
                     reset_maze()
                 if event.key == pygame.K_ESCAPE:
                     run = False
