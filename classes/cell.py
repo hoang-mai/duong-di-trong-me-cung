@@ -1,3 +1,4 @@
+import sys
 import pygame
 from ui.colors import *
 from classes.heuristic import Heuristic
@@ -87,6 +88,46 @@ class Cell:
                 clock.tick(drawing_speed)
                 if (neighbor.f, neighbor) not in open_set:
                     heapq.heappush(open_set, (neighbor.f, neighbor))
+
+    def ucs(self,screen, end_node):
+        open_set = []
+        closed_set = set()
+        heapq.heappush(open_set, (self.g, self))
+
+        clock = pygame.time.Clock()
+
+        while open_set:
+            current_node = heapq.heappop(open_set)[1]
+
+            if current_node == end_node:
+                path = []
+                while current_node:
+                    path.append(current_node)
+                    current_node = current_node.parent
+                return path[::-1]
+
+            closed_set.add(current_node)
+
+            for neighbor in current_node.connections:
+                if neighbor in closed_set:
+                    continue
+                tentative_g = current_node.g + 1
+                start_pos = ((current_node.x+0.5)*self.size, (current_node.y+0.5)*self.size)
+                end_pos = ((neighbor.x+0.5)*self.size, (neighbor.y+0.5)*self.size)
+
+                pygame.draw.line(screen, orange, start_pos,end_pos, 2)
+                pygame.draw.circle(screen, orange, start_pos, self.size// 6)
+                pygame.display.flip()
+                clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
+
+                drawing_speed = 100  # Số frames mỗi giây bạn muốn vẽ
+                clock.tick(drawing_speed)
+                if (tentative_g, neighbor) not in open_set:
+                    neighbor.parent = current_node
+                    neighbor.g = tentative_g
+                    heapq.heappush(open_set, (tentative_g, neighbor))
+
+        return None
 
     def IsConneted(self, cell):
         if cell != None:

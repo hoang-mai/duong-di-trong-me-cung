@@ -118,10 +118,11 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     # Calculate the step of each cell from the starting node
     # it's gonna initialize a grid that store the cost of each cell
     # from the starting node
-    shortest_path = self.starting_node.astar(screen,self.end_node)
+    # astar_path = self.starting_node.astar(screen,self.end_node)
+    ucs_path = self.starting_node.ucs(screen,self.end_node)
   
-    for i in range(len(shortest_path)):
-        shortest_path[i].isPath=True
+    for i in range(len(ucs_path)):
+        ucs_path[i].isPath=True
 
     self.grid.heuristics = Heuristic(self.rows, self.cols)
     for x in range(len(self.grid.cells)):
@@ -130,6 +131,6 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
                 self.grid.cells[x][y].cost = 0 if self.grid.heuristics.cells_record[x][y] == None else self.grid.cells[x][y].g
 
 
-    for i in range(len(shortest_path)):
-        shortest_path[i].highlight = green
-    self.shortest_path = shortest_path
+    for i in range(len(ucs_path)):
+        ucs_path[i].highlight = green
+    self.shortest_path = ucs_path
