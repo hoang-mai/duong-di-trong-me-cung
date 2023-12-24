@@ -92,7 +92,7 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     # it's gonna initialize a grid that store the cost of each cell
     # from the starting node
     start_time = time.time()
-    # shortest_path = self.starting_node.ucs(screen,self.end_node)
+    # shortest_path = self.starting_node.bfs(screen,self.end_node)
     # shortest_path = self.starting_node.astar(screen,self.end_node)
     shortest_path = self.starting_node.ids(screen,self.end_node)
     end_time = time.time()

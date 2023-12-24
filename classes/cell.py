@@ -23,7 +23,6 @@ def depth_limited_dfs(screen, self, end_node, depth_limit):
             path = []
 
             while current_node:
-                print(current_node.g)
                 path.append(current_node)
                 current_node = current_node.parent
 
@@ -125,7 +124,7 @@ class Cell:
                 if (neighbor.f, neighbor) not in open_set:
                     heapq.heappush(open_set, (neighbor.f, neighbor))
 
-    def ucs(self,screen, end_node):
+    def bfs(self,screen, end_node):
         open_set = []
         closed_set = set()
         heapq.heappush(open_set, (self.g, self))
