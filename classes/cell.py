@@ -12,6 +12,36 @@ offset = 0
 def heuristic(a, b):
     return abs(a.x - b.x) + abs(a.y - b.y)
 
+def depth_limited_dfs(screen, self, end_node, depth_limit):
+    stack = [(self, 0)]
+    visited = set()
+
+    while stack:
+        current_node, current_depth = stack.pop()
+
+        if current_node == end_node:
+            path = []
+            while current_node:
+                path.append(current_node)
+                current_node = current_node.parent
+            return path[::-1]
+
+        if current_depth < depth_limit and current_node not in visited:
+            visited.add(current_node)
+
+            for neighbor in current_node.connections:
+                neighbor.parent = current_node
+
+                start_pos = ((current_node.x+0.5)*self.size, (current_node.y+0.5)*self.size)
+                end_pos = ((neighbor.x+0.5)*self.size, (neighbor.y+0.5)*self.size)
+
+                pygame.draw.line(screen, orange, start_pos,end_pos, 2)
+                pygame.draw.circle(screen, orange, start_pos, cell_size// 6)
+                pygame.display.flip()
+                clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
+
+                drawing_speed = 100  # Số frames mỗi giây bạn muốn vẽ
+                stack.append((neighbor, current_depth + 1))
 
 class Cell:
     def __init__(self, x, y, size=40):
@@ -128,7 +158,18 @@ class Cell:
                     heapq.heappush(open_set, (tentative_g, neighbor))
 
         return None
-
+    
+    def ids(self,screen,end_node, max_depth = 100):
+        for depth in range(1, max_depth + 1):
+            pygame.draw.circle(screen, (255, 165, 0),
+                ((self.x + 0.5) * self.size, (self.y + 0.5) * self.size),self.size // 6)
+            pygame.display.flip()
+            
+            path = depth_limited_dfs(screen, self, end_node, depth)
+            if path is not None:
+                return path
+        return None
+    
     def IsConneted(self, cell):
         if cell != None:
             if cell in self.connections and self in cell.connections:

@@ -65,34 +65,6 @@ class Grid:
                     A.East, B.West = None, None
                 elif A.West == B:
                     A.West, B.East = None, None
-            # ---- Polar Grid -------
-            elif gridType == "Polar":
-                if A.inward == B :
-                    A.inward = None
-                    B.outward.remove(A)
-                elif B.inward == A:
-                    B.inward = None
-                    A.outward.remove(B)
-                elif A.clockwise == B or B.c_clockwise == A:
-                    A.clockwise =  None
-                    B.c_clockwise = None
-                elif A.c_clockwise == B or B.clockwise == A:
-                    A.c_clockwise = None
-                    B.clockwise = None
-            # ----- Hex Grid -------
-            elif gridType == "Hex":
-                if A.North == B:
-                    A.North, B.South = None, None
-                elif A.South == B:
-                    A.South, B.North = None, None
-                elif A.SouthEast == B:
-                    A.SouthEast, B.NorthWest = None, None
-                elif A.SouthWest == B:
-                    A.SouthWest, B.NorthEast = None, None
-                elif A.NorthEast == B:
-                    A.NorthEast, B.SouthWest = None, None
-                elif A.NorthWest == B:
-                    A.NorthWest, B.SouthEast = None, None
 
     def Show(self, screen, show_heuristic, show_color_map, shortest_path = None):
         if not self.isSorted and shortest_path:
@@ -120,8 +92,9 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     # it's gonna initialize a grid that store the cost of each cell
     # from the starting node
     start_time = time.time()
-    shortest_path = self.starting_node.ucs(screen,self.end_node)
-    # shortest_path = self.starting_node.astar(screen,self.end_node)
+    # shortest_path = self.starting_node.ucs(screen,self.end_node)
+    shortest_path = self.starting_node.astar(screen,self.end_node)
+    # shortest_path = self.starting_node.ids(screen,self.end_node)
     end_time = time.time()
     execution_time = end_time - start_time
     print(execution_time)
