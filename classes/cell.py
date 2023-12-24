@@ -17,21 +17,26 @@ def depth_limited_dfs(screen, self, end_node, depth_limit):
     visited = set()
 
     while stack:
-        current_node, current_depth = stack.pop()
+        current_node, current_node.g = stack.pop()
 
         if current_node == end_node:
             path = []
+
             while current_node:
+                print(current_node.g)
                 path.append(current_node)
                 current_node = current_node.parent
+
             return path[::-1]
 
-        if current_depth < depth_limit and current_node not in visited:
+        if current_node.g < depth_limit and current_node not in visited:
             visited.add(current_node)
 
             for neighbor in current_node.connections:
+                if neighbor in visited:
+                    continue
                 neighbor.parent = current_node
-
+                neighbor.g=current_node.g + 1
                 start_pos = ((current_node.x+0.5)*self.size, (current_node.y+0.5)*self.size)
                 end_pos = ((neighbor.x+0.5)*self.size, (neighbor.y+0.5)*self.size)
 
@@ -40,8 +45,9 @@ def depth_limited_dfs(screen, self, end_node, depth_limit):
                 pygame.display.flip()
                 clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
 
-                drawing_speed = 100  # Số frames mỗi giây bạn muốn vẽ
-                stack.append((neighbor, current_depth + 1))
+                drawing_speed = 10  # Số frames mỗi giây bạn muốn vẽ
+                stack.append((neighbor, neighbor.g))
+    return None
 
 class Cell:
     def __init__(self, x, y, size=40):
@@ -159,12 +165,9 @@ class Cell:
 
         return None
     
-    def ids(self,screen,end_node, max_depth = 100):
+    def ids(self,screen,end_node, max_depth = 500):
         for depth in range(1, max_depth + 1):
-            pygame.draw.circle(screen, (255, 165, 0),
-                ((self.x + 0.5) * self.size, (self.y + 0.5) * self.size),self.size // 6)
-            pygame.display.flip()
-            
+
             path = depth_limited_dfs(screen, self, end_node, depth)
             if path is not None:
                 return path

@@ -93,8 +93,8 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     # from the starting node
     start_time = time.time()
     # shortest_path = self.starting_node.ucs(screen,self.end_node)
-    shortest_path = self.starting_node.astar(screen,self.end_node)
-    # shortest_path = self.starting_node.ids(screen,self.end_node)
+    # shortest_path = self.starting_node.astar(screen,self.end_node)
+    shortest_path = self.starting_node.ids(screen,self.end_node)
     end_time = time.time()
     execution_time = end_time - start_time
     print(execution_time)
