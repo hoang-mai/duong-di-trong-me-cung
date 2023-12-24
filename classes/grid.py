@@ -93,11 +93,14 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     # from the starting node
     start_time = time.time()
     # shortest_path = self.starting_node.bfs(screen,self.end_node)
+<<<<<<< Updated upstream
     # shortest_path = self.starting_node.astar(screen,self.end_node)
     shortest_path = self.starting_node.ids(screen,self.end_node)
+=======
+    shortest_path = self.starting_node.astar(screen,self.end_node)
+    # shortest_path = self.starting_node.ids(screen,self.end_node)
+>>>>>>> Stashed changes
     end_time = time.time()
-    execution_time = end_time - start_time
-    print(execution_time)
   
     for i in range(len(shortest_path)):
         shortest_path[i].isPath=True
@@ -112,3 +115,5 @@ def Update(self, screen, show_heuristic, show_color_map, show_path):
     for i in range(len(shortest_path)):
         shortest_path[i].highlight = green
     self.shortest_path = shortest_path
+
+    return end_time - start_time

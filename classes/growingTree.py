@@ -25,6 +25,7 @@ class GrowingTree:
         self.show_path = True
         self.path_color = path_color
         self.shortest_path = None
+        self.execution_time = 0
 
     def Generate(self, screen, show_heuristic, show_color_map, show_path):
         if not self.isDone:
@@ -54,7 +55,7 @@ class GrowingTree:
                 else:
                     active.remove(current)
             self.isDone = True
-            Update(self, screen, show_heuristic, show_color_map, show_path)
+            self.execution_time = Update(self, screen, show_heuristic, show_color_map, show_path)
 
         if show_path:
             self.grid.Show(screen, show_heuristic, show_color_map, self.shortest_path)

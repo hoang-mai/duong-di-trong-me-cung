@@ -145,40 +145,59 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     fps = 120
 
+    file_astar = "time_astar.txt"
+    file_bfs = "time_bfs.txt"
+    file_ids = "time_ids.txt"
+    time = []
+    max_iterations = 5
 
     def update_press_enter():
         current_width, current_height = pygame.display.get_surface().get_size()
         PressEnter.position = (current_width // 2, current_height // 2)
-    while run:
-        clock.tick(fps)
-        frame_rate = int(clock.get_fps())
-        pygame.display.set_caption(f"Maze Generator - FPS: {frame_rate}")
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    reset_maze()
-                if event.key == pygame.K_ESCAPE:
+    for _ in range(10,31):
+        print(_)
+        iteration_count = 0
+        time_temp = 0
+        while run and iteration_count < max_iterations:
+            clock.tick(fps)
+            frame_rate = int(clock.get_fps())
+            pygame.display.set_caption(f"Maze Generator - FPS: {frame_rate}")
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     run = False
-                if event.key == pygame.K_RETURN:
-                    start = not start
-                elif event.key == pygame.K_h:
-                    show_text = not show_text
-                elif event.key == pygame.K_SPACE:
-                    color_mode = not color_mode
-                elif event.key == pygame.K_s:
-                    show_path = not show_path
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    rightMouseClicked = True
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        reset_maze()
+                    if event.key == pygame.K_ESCAPE:
+                        run = False
+                    if event.key == pygame.K_RETURN:
+                        start = not start
+                    elif event.key == pygame.K_h:
+                        show_text = not show_text
+                    elif event.key == pygame.K_SPACE:
+                        color_mode = not color_mode
+                    elif event.key == pygame.K_s:
+                        show_path = not show_path
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        rightMouseClicked = True
 
-        if start:
-            growingTree.Generate(screen, show_text, color_mode, show_path)
-        else:
-            PressEnter.Render(screen)
-        pygame.display.flip()
+            if start:
+                growingTree.Generate(screen, show_text, color_mode, show_path)
+                time_temp = time_temp + growingTree.execution_time
+                iteration_count += 1
+                growingTree = classes.GrowingTree(classes.Grid(_, _, screen.get_width() // _), "GREEN")
+            else:
+                PressEnter.Render(screen)
+            pygame.display.flip()
+        time.append(time_temp)
 
-    pygame.image.save(screen, "./images/path.png")
-    pygame.quit()
+    
+    with open(file_astar, 'w') as file:
+        for item in time:
+            file.write("%.6f\n" % item)
+
+        pygame.image.save(screen, "./images/path.png")
+        pygame.quit()

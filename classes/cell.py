@@ -5,7 +5,10 @@ from classes.heuristic import Heuristic
 from constants import *
 import heapq
 from queue import Queue
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 pygame.font.init()
 text_font = pygame.font.SysFont("Arial", cell_size // 3)
 offset = 0
@@ -14,7 +17,10 @@ offset = 0
 def heuristic(a, b):
     return abs(a.x - b.x) + abs(a.y - b.y)
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 def depth_limited_dfs(screen, self, end_node, depth_limit):
     stack = [(self, 0)]
     visited = set()
@@ -50,7 +56,10 @@ def depth_limited_dfs(screen, self, end_node, depth_limit):
                 drawing_speed = 100  # Số frames mỗi giây bạn muốn vẽ
                 stack.append((neighbor, neighbor.g))
     return None
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 class Cell:
     def __init__(self, x, y, size=40):
@@ -129,7 +138,11 @@ class Cell:
                 if (neighbor.f, neighbor) not in open_set:
                     heapq.heappush(open_set, (neighbor.f, neighbor))
 
+<<<<<<< Updated upstream
     def bfs(self, screen, end_node):
+=======
+    def bfs(self,screen, end_node):
+>>>>>>> Stashed changes
         open_queue = Queue()
         closed_set = set()
         open_queue.put(self)
@@ -168,14 +181,23 @@ class Cell:
                     open_queue.put(neighbor)
 
         return None
+<<<<<<< Updated upstream
 
     def ids(self, screen, end_node, max_depth=500):
+=======
+    
+    def ids(self,screen,end_node, max_depth = 500):
+>>>>>>> Stashed changes
         for depth in range(1, max_depth + 1):
             path = depth_limited_dfs(screen, self, end_node, depth)
             if path is not None:
                 return path
         return None
+<<<<<<< Updated upstream
 
+=======
+    
+>>>>>>> Stashed changes
     def IsConneted(self, cell):
         if cell != None:
             if cell in self.connections and self in cell.connections:
