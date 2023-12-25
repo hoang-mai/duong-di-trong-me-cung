@@ -12,44 +12,6 @@ offset = 0
 def heuristic(a, b):
     return abs(a.x - b.x) + abs(a.y - b.y)
 
-<<<<<<< Updated upstream
-=======
-def depth_limited_dfs(screen, self, end_node, depth_limit):
-    stack = [(self, 0)]
-    visited = set()
-
-    while stack:
-        current_node, current_node.g = stack.pop()
-
-        if current_node == end_node:
-            path = []
-
-            while current_node:
-                path.append(current_node)
-                current_node = current_node.parent
-
-            return path[::-1]
-
-        if current_node.g < depth_limit and current_node not in visited:
-            visited.add(current_node)
-
-            for neighbor in current_node.connections:
-                if neighbor in visited:
-                    continue
-                neighbor.parent = current_node
-                neighbor.g = current_node.g + 1
-                start_pos = ((current_node.x+0.5)*self.size, (current_node.y+0.5)*self.size)
-                end_pos = ((neighbor.x+0.5)*self.size, (neighbor.y+0.5)*self.size)
-
-                pygame.draw.line(screen, orange, start_pos,end_pos, 2)
-                pygame.draw.circle(screen, orange, start_pos, cell_size// 6)
-                pygame.display.flip()
-                clock = pygame.time.Clock()  # Khởi tạo đối tượng Clock
-
-                drawing_speed = 10  # Số frames mỗi giây bạn muốn vẽ
-                stack.append((neighbor, neighbor.g))
-    return None
->>>>>>> Stashed changes
 
 class Cell:
     def __init__(self, x, y, size=40):
@@ -166,18 +128,6 @@ class Cell:
                     heapq.heappush(open_set, (heuristic(neighbor, end_node), neighbor))
 
         return None
-<<<<<<< Updated upstream
-
-=======
-    
-    def ids(self,screen,end_node, max_depth = 500):
-        for depth in range(1, max_depth + 1):
-            path = depth_limited_dfs(screen, self, end_node, depth)
-            if path is not None:
-                return path
-        return None
-    
->>>>>>> Stashed changes
     def IsConneted(self, cell):
         if cell != None:
             if cell in self.connections and self in cell.connections:
